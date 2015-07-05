@@ -1,11 +1,7 @@
 import neovim
-import python_vim_util
-from python_vim_util import NvimUtil
-from plugins import switch_file
-from plugins import notes
 
 @neovim.plugin
-class DaeyunNeovim(object):
+class SwitchFile(object):
     def __init__(self, vim):
         self.vim = vim
         self.vim_util = NvimUtil(vim)

@@ -1,5 +1,6 @@
 .ropeproject
 *.log
+/logs
 
 ### Vim ###
 [._]*.s[a-w][a-z]

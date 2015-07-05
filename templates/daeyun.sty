@@ -1,0 +1,59 @@
+% =====================================
+%
+%   daeyun.sty - Daeyun's LaTeX macros
+%
+%   Daeyun Shin (daeyun@daeyunshin.com)
+%   Last modified   Nov 18, 2014
+%
+% =====================================
+\RequirePackage{etoolbox}
+\RequirePackage{xparse}
+
+% \rowvec{1, 2, 3, ...}
+\ExplSyntaxOn
+\int_new:N \l_rowvec_ind
+\NewDocumentCommand{\rowvec}{>{\SplitList,}m} {
+  \int_set:Nn \l_rowvec_ind {1}
+  \left[
+    \begin{array}{*{\tl_count:n{#1}}{c}}
+      \tl_map_inline:nn {#1} {\int_compare:nF{1 = \l_rowvec_ind}{&} ##1 \int_incr:N \l_rowvec_ind}
+    \end{array}
+  \right]
+}
+\ExplSyntaxOff
+
+% Display a path e.g. \ppath{File,New,Document}
+% http://tex.stackexchange.com/questions/87407/iterating-through-comma-separated-arguments
+\newcommand{\ppath}[2][$\;\triangleright\;$]{%
+  \def\nextitem{\def\nextitem{#1}}% Separator
+  \renewcommand*{\do}[1]{\nextitem\textsf{##1}}% How to process each item
+  \docsvlist{#2}% Process list
+}
+
+% http://tex.stackexchange.com/questions/175251/how-to-redefine-a-command-using-declaremathoperator
+\makeatletter
+\newcommand\RedeclareMathOperator{%
+  \@ifstar{\def\rmo@s{m}\rmo@redeclare}{\def\rmo@s{o}\rmo@redeclare}%
+}
+% this is taken from \renew@command
+\newcommand\rmo@redeclare[2]{%
+  \begingroup \escapechar\m@ne\xdef\@gtempa{{\string#1}}\endgroup
+  \expandafter\@ifundefined\@gtempa
+     {\@latex@error{\noexpand#1undefined}\@ehc}%
+     \relax
+  \expandafter\rmo@declmathop\rmo@s{#1}{#2}}
+% This is just \@declmathop without \@ifdefinable
+\newcommand\rmo@declmathop[3]{%
+  \DeclareRobustCommand{#2}{\qopname\newmcodes@#1{#3}}%
+}
+\@onlypreamble\RedeclareMathOperator
+\makeatother
+
+%\RedeclareMathOperator*{\argmin}{argmin}
+%\RedeclareMathOperator*{\argmax}{argmax}
+
+% more space than \; but less space than \quad
+\newcommand\+{\mkern13mu}
+
+\newcommand{\tight}[1]{\!#1\!}
+\newcommand{\loose}[1]{\;#1\;}
